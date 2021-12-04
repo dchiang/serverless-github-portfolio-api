@@ -1,0 +1,40 @@
+{
+  "configurations": [
+    {
+      "type": "aws-sam",
+      "request": "direct-invoke",
+      "name": "serverless-github-portfolio-api:GitHubPortfolioFunction (python3.8)",
+      "invokeTarget": {
+        "target": "template",
+        "templatePath": "${workspaceFolder}/template.yaml",
+        "logicalId": "GitHubPortfolioFunction"
+      },
+      "lambda": {
+        "payload": {},
+        "environmentVariables": {},
+        "runtime": "python3.8"
+      }
+    },
+    {
+      "type": "aws-sam",
+      "request": "direct-invoke",
+      "name": "API serverless-github-portfolio-api:GitHubPortfolioFunction (python3.8)",
+      "invokeTarget": {
+        "target": "api",
+        "templatePath": "${workspaceFolder}/template.yaml",
+        "logicalId": "GitHubPortfolioFunction"
+      },
+      "api": {
+        "path": "/github-portfolio/dchiang",
+        "httpMethod": "get",
+        "payload": {
+          "json": {}
+        },
+        "querystring": "repos-amount=5&languages-amount=5"
+      },
+      "lambda": {
+        "runtime": "python3.8"
+      }
+    }
+  ]
+}
