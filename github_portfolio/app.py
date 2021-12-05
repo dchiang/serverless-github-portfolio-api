@@ -97,20 +97,21 @@ def queryGitHub(parameters):
         )
 
 
+def lambdaResponse(statusCode, body):
+    return {
+        "statusCode": statusCode,
+        "headers": {"Access-Control-Allow-Origin": "*"},
+        "body": json.dumps(body),
+    }
+
+
 def lambda_handler(event, context):
     try:
         parameters = getParameters(event)
         githubResponse = queryGitHub(parameters)
         responseParser = GitHubParser()
         response = responseParser.parseGitHubResponse(githubResponse)
-        return {"statusCode": 200, "body": json.dumps(response)}
+        return lambdaResponse(200, response)
     except (LookupError, ConnectionError) as exception:
         statusCode, message = exception.args
-        return {
-            "statusCode": statusCode,
-            "body": json.dumps(
-                {
-                    "message": message,
-                }
-            ),
-        }
+        return lambdaResponse(statusCode, body={"message": message})
