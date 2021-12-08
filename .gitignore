@@ -3,6 +3,7 @@
 
 ### Linux ###
 *~
+nohup.out
 
 # temporary files which can be created if a process still has a handle open of a deleted file
 .fuse_hidden*
@@ -240,5 +241,6 @@ $RECYCLE.BIN/
 # Build folder
 
 */build/*
+**/.aws-sam
 
 # End of https://www.gitignore.io/api/osx,linux,python,windows,pycharm,visualstudiocode
