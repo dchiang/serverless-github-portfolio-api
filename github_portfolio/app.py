@@ -71,6 +71,7 @@ def queryGitHub(parameters):
                             name
                             pushedAt
                             url
+                            openGraphImageUrl
                             languages(last: """
         + parameters["languagesAmount"]
         + """) {
