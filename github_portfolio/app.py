@@ -19,14 +19,16 @@ def getGitHubPortfolioPAT():
 def getLanguagesAmount(parametersDict):
     default = "10"
     parameter = "languages-amount"
-    languagesAmount = util.getUrlParameter(parametersDict, parameter, Parameter.QUERY)
+    languagesAmount = util.getUrlParameter(
+        parametersDict, parameter, Parameter.QUERY)
     return languagesAmount if languagesAmount else default
 
 
 def getReposAmount(parametersDict):
     default = "10"
     parameter = "repos-amount"
-    reposAmount = util.getUrlParameter(parametersDict, parameter, Parameter.QUERY)
+    reposAmount = util.getUrlParameter(
+        parametersDict, parameter, Parameter.QUERY)
     return reposAmount if reposAmount else default
 
 
