@@ -96,7 +96,7 @@ def queryGitHub(parameters):
         return response
     except requests.RequestException as exception:
         raise ConnectionError(
-            "503", "Something went wrong trying to get data from GitHub" + exception
+            "503", "Something went wrong while trying to get data from GitHub" + exception
         )
 
 
