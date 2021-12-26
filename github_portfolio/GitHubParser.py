@@ -1,4 +1,14 @@
 class GitHubParser:
+
+    def __init__(self):
+        self.languagesColors = dict()
+
+    def setLanguagesColors(self, languagesColors):
+        self.languagesColors = languagesColors
+
+    def __getLanguageColor(self, languageName):
+        return self.languagesColors[languageName]["color"]
+
     def __getUserProfile(self, githubUser):
         profile = dict()
         for key, value in githubUser.items():
@@ -16,14 +26,17 @@ class GitHubParser:
             for key, value in element.items():
                 if key == "languages":
                     languages = dict()
-                    languages.update({"totalSize": element["languages"]["totalSize"]})
-                    languagesList = dict()
+                    languages.update(
+                        {"totalSize": element["languages"]["totalSize"]})
+                    languagesList = list()
                     for repoLanguage in element["languages"]["edges"]:
-                        languagesList.update(
-                            {repoLanguage["node"]["name"]: repoLanguage["size"]}
-                        )
+                        language = dict()
+                        language.update({"name": repoLanguage["node"]["name"]})
+                        language.update({"size": repoLanguage["size"]})
+                        language.update(
+                            {"color": self.__getLanguageColor(language["name"])})
+                        languagesList.append(language)
                     languages.update({"list": languagesList})
-                    key = "languages"
                     value = languages
                 repository.update({key: value})
             repositories.append(repository)
@@ -31,8 +44,8 @@ class GitHubParser:
 
     def __getReposStackLanguages(self, repositories):
         stackedLanguages = dict()
-        stackedLanguages.update({"list": {}})
         stackedLanguages.update({"totalSize": 0})
+        stackedLanguages.update({"list": list()})
         for repository in repositories:
             stackedLanguages.update(
                 {
@@ -41,13 +54,17 @@ class GitHubParser:
                 }
             )
             reposLanguages = repository["languages"]["list"]
-            for key, value in reposLanguages.items():
-                if key in stackedLanguages["list"].keys():
-                    stackedLanguages["list"].update(
-                        {key: stackedLanguages["list"][key] + value}
-                    )
-                else:
-                    stackedLanguages["list"].update({key: value})
+            for repoLanguage in reposLanguages:
+                language = dict(repoLanguage)
+                updated = False
+                for index in range(len(stackedLanguages["list"])):
+                    stacked = stackedLanguages["list"][index]
+                    if stackedLanguages["list"][index]["name"] == language["name"]:
+                        stackedLanguages["list"][index]["size"] = stackedLanguages["list"][index]["size"] + \
+                            language["size"]
+                        updated = True
+                if updated is False:
+                    stackedLanguages["list"].append(language)
         return stackedLanguages
 
     def parseGitHubResponse(self, githubResponse):

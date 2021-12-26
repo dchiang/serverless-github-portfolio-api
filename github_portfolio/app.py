@@ -46,6 +46,19 @@ def getParameters(event):
     return parameters
 
 
+def getGitHubLanguagesColor():
+    endpoint = "https://raw.githubusercontent.com/ozh/github-colors/master/colors.json"
+    try:
+        request = requests.get(endpoint)
+        response = request.json()
+        return response
+    except:
+        colors = open("colors.json")
+        response = json.load(colors)
+        colors.close()
+        return response
+
+
 def queryGitHub(parameters):
     apiURL = "https://api.github.com"
     endpoint = apiURL + "/graphql"
@@ -96,7 +109,7 @@ def queryGitHub(parameters):
         return response
     except requests.RequestException as exception:
         raise ConnectionError(
-            "503", "Something went wrong while trying to get data from GitHub" + exception
+            "503", "Something went wrong while trying to get data from GitHub " + exception
         )
 
 
@@ -112,7 +125,9 @@ def lambda_handler(event, context):
     try:
         parameters = getParameters(event)
         githubResponse = queryGitHub(parameters)
+        languagesColors = getGitHubLanguagesColor()
         responseParser = GitHubParser()
+        responseParser.setLanguagesColors(languagesColors)
         response = responseParser.parseGitHubResponse(githubResponse)
         return lambdaResponse(200, response)
     except (LookupError, ConnectionError) as exception:
