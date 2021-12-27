@@ -87,7 +87,7 @@ def queryGitHub(parameters):
                             pushedAt
                             url
                             openGraphImageUrl
-                            languages(last: """
+                            languages(orderBy: {field: SIZE, direction: DESC}, last: """
         + parameters["languagesAmount"]
         + """) {
                                 totalSize
